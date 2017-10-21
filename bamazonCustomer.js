@@ -18,20 +18,28 @@ connection.connect(function(err) {
 function readProducts() {
   console.log("Selecting all products...\n");
   connection.query("SELECT * FROM products", function(error, response) {
+
+  	 var table = new Table({
+            head: ['Item ID', 'Product Name', 'Department', 'Price', 'Stock Quantity']
+            , colWidths: [10, 20, 20, 20, 20]
+        });
+
     if (error) throw error;
 
-    var strOut = "";
-
     for (var i = 0; i < response.length; i++) {
-    	strOut = "";
-    	strOut += "Item ID: " + response[i].item_id + "  //  ";
-    	strOut += "Product Name: " + response[i].product_name + "  //  ";
-    	strOut += "Department: " + response[i].department_name + "  //  ";
-    	strOut += "Price: " + response[i].price + "  //  ";
-    	strOut += "In Stock: " + response[i].stock_quantity + "  //  ";
+    	table.push ([response[i].item_id, response[i].product_name, 
+    		response[i].department_name, response[i].price, 
+    		response[i].stock_quantity])
 
-    	console.log(strOut);
-    }
+    // for (var i = 0; i < response.length; i++) {
+    	// table.push  (for (var i = 0; i < response.length; i++)) {
+    	//  ([response[i].item_id, response[i].product_name, 
+    	// 	response[i].department_name, response[i].price, 
+    	// 	response[i].stock_quantity])
+    
+    console.log(table.toString());
+}
+
 
 inquirer
     .prompt([
