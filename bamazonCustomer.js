@@ -16,8 +16,8 @@ connection.connect(function(err) {
 
 
 function readProducts() {
-  console.log("Selecting all products...\n");
-  connection.query("SELECT * FROM products", function(error, response) {
+	console.log("Selecting all products...\n");
+	connection.query("SELECT * FROM products", function(error, response) {
 
   	 var table = new Table({
             head: ['Item ID', 'Product Name', 'Department', 'Price', 'Stock Quantity']
@@ -26,52 +26,69 @@ function readProducts() {
 
     if (error) throw error;
 
-    for (var i = 0; i < response.length; i++) {
-    	table.push ([response[i].item_id, response[i].product_name, 
-    		response[i].department_name, response[i].price, 
-    		response[i].stock_quantity])
+
+    	for (var i = 0; i < response.length; i++) {
+    		// var array = response[i];
+    		table.push ([response[i].item_id, response[i].product_name, 
+    			response[i].department_name, response[i].price, 
+    			response[i].stock_quantity]);
+
+    		// table.push([array]);
 
     // for (var i = 0; i < response.length; i++) {
     	// table.push  (for (var i = 0; i < response.length; i++)) {
     	//  ([response[i].item_id, response[i].product_name, 
     	// 	response[i].department_name, response[i].price, 
     	// 	response[i].stock_quantity])
+
+
+			console.log(table.toString());
+
+
+		}
+
+		   //  	var array = [response.item_id, response.product_name, response.department_name, 
+    	// response.price, response.stock_quantity]
+
+    	// array.forEach(function(response, index){
+    	// 	table.push(response)
+    	// 	// console.log(response)
+    	// 				console.log(table.toString());
+    	// })
     
-    console.log(table.toString());
-}
 
 
-inquirer
-    .prompt([
-      {
-        name: "item",
-        type: "input",
-        message: "What is the ID of the item you wish to purchase?"
-      },
-      {
-        name: "itemUnits",
-        type: "input",
-        message: "How many items do you want purchase?",
-        validate: function(value) {
-          if (isNaN(value) === false) {
-            return true;
-          }
-          return false;
-        }
-      }
-    ])
-	.then(function(answer) {
+	inquirer
+    	.prompt([
+    		{
+		        name: "item",
+		        type: "input",
+		        message: "What is the ID of the item you wish to purchase?"
+	      	},
+      		{
+		        name: "itemUnits",
+		        type: "input",
+		        message: "How many items do you want purchase?",
+        		validate: function(value) {
+          			if (isNaN(value) === false) {
+            			return true;
+          			}
+          				return false;
+        			}
+      		}
+    	])
+		.then(function(answer) {
 
-		var chosenItem = answer.item -1;
-		var chosenProduct = response[chosenItem];
-		var howMany = answer.itemUnits
-		console.log(chosenItem)
-		console.log(howMany)
+			var chosenItem = answer.item -1;
+			var chosenProduct = response[chosenItem];
+			var howMany = answer.itemUnits
+			console.log(chosenItem)
+			console.log(howMany)
 
-		if (howMany <= response[chosenItem].stock_quantity){
-			console.log("yes");
-			connection.query(
-				"UPDATE products SET ? WHERE ?",
+			if (howMany <= response[chosenItem].stock_quantity){
+				console.log("yes");
+				connection.query(
+					"UPDATE products SET ? WHERE ?",
 				[{
 					stock_quantity: response[chosenItem].stock_quantity - howMany
 				},
@@ -79,12 +96,16 @@ inquirer
 					item_id: response[chosenItem].item_id
 				}],
 				)
-		}
-		console.log(response[chosenItem].item_id)
-		   connection.end();
+			}
+			else {
+				console.log("Insufficient quantity!")
+				readProducts();
+			}
+			console.log(response[chosenItem].item_id)
+		   	connection.end();
 		
   		});
-	 });
+	});
 }
 		
 
