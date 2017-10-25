@@ -1,6 +1,7 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 var Table = require('cli-table');
+var colors = require('colors');
 
 // create the connection information for the sql database
 var connection = mysql.createConnection({
@@ -16,7 +17,7 @@ connection.connect(function(err) {
 
 
 function readProducts() {
-	console.log("Selecting all products...\n");
+	console.log("Selecting all products...\n".red);
 	connection.query("SELECT * FROM products", function(error, response) {
 
   	 var table = new Table({
@@ -25,38 +26,15 @@ function readProducts() {
         });
 
     if (error) throw error;
-
-
     	for (var i = 0; i < response.length; i++) {
-    		// var array = response[i];
-    		table.push ([response[i].item_id, response[i].product_name, 
-    			response[i].department_name, response[i].price, 
-    			response[i].stock_quantity]);
-
-    		// table.push([array]);
-
-    // for (var i = 0; i < response.length; i++) {
-    	// table.push  (for (var i = 0; i < response.length; i++)) {
-    	//  ([response[i].item_id, response[i].product_name, 
-    	// 	response[i].department_name, response[i].price, 
-    	// 	response[i].stock_quantity])
-
-
-			console.log(table.toString());
-
+ 			table.push ([response[i].item_id, response[i].product_name, 
+    		response[i].department_name, response[i].price, 
+    		response[i].stock_quantity]);
 
 		}
-
-		   //  	var array = [response.item_id, response.product_name, response.department_name, 
-    	// response.price, response.stock_quantity]
-
-    	// array.forEach(function(response, index){
-    	// 	table.push(response)
-    	// 	// console.log(response)
-    	// 				console.log(table.toString());
-    	// })
-    
-
+	
+	console.log(table.toString());
+		 
 
 	inquirer
     	.prompt([
@@ -86,7 +64,7 @@ function readProducts() {
 			console.log(howMany)
 
 			if (howMany <= response[chosenItem].stock_quantity){
-				console.log("yes");
+				console.log("Okay, thank you for your purchase! Buy again!");
 				connection.query(
 					"UPDATE products SET ? WHERE ?",
 				[{
@@ -96,9 +74,10 @@ function readProducts() {
 					item_id: response[chosenItem].item_id
 				}],
 				)
+				readProducts();
 			}
 			else {
-				console.log("Insufficient quantity!")
+				console.log("Sorry, insufficient quantity!".rainbow)
 				readProducts();
 			}
 			console.log(response[chosenItem].item_id)
