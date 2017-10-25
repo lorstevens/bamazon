@@ -60,8 +60,7 @@ function readProducts() {
 			var chosenItem = answer.item -1;
 			var chosenProduct = response[chosenItem];
 			var howMany = answer.itemUnits
-			console.log(chosenItem)
-			console.log(howMany)
+
 
 			if (howMany <= response[chosenItem].stock_quantity){
 				console.log("Okay, thank you for your purchase! Buy again!");
@@ -77,7 +76,7 @@ function readProducts() {
 				readProducts();
 			}
 			else {
-				console.log("Sorry, insufficient quantity!".rainbow)
+				console.log("Sorry, insufficient quantity!".red)
 				readProducts();
 			}
 			// console.log(response[chosenItem].item_id)

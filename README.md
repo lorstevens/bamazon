@@ -18,3 +18,5 @@ Once the user inputs this information, the database will update with the new qua
 ![Alt text](./images/screenshot2.png?raw=true "Optional Title")
 
 If the user requests a quantity over the amount left in stock, then the database is not updated, but the user receives an insufficient quantity message and is prompted to shop again.
+
+![Alt text](./images/screenshot3.png?raw=true "Optional Title")
