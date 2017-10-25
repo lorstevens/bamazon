@@ -80,7 +80,7 @@ function readProducts() {
 				console.log("Sorry, insufficient quantity!".rainbow)
 				readProducts();
 			}
-			console.log(response[chosenItem].item_id)
+			// console.log(response[chosenItem].item_id)
 		   	connection.end();
 		
   		});
